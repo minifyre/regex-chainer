@@ -1,5 +1,8 @@
 import {h} from 'preact'
 import {useState} from 'preact/hooks'
+
+import {moveTo, removeAt, setAt} from '../../lib/array'
+
 import * as style from './style.css'
 import {userInput2regex} from './user-input2regex'
 
@@ -15,9 +18,7 @@ type IState = {
 	text: string
 }
 
-const removeAt = <T,>(arr: T[], i: number) => arr.slice(0, i).concat(arr.slice(i + 1))
-// todo: T could be an object- i keyof T & arr T[] | extends {[K]: T}
-const setAt = <T,>(arr: T[], i: number, val: T) => [...arr.slice(0, i), val, ...arr.slice(i + 1)]
+// object utils
 const setPropVal = <T, K extends keyof T>(obj: T, prop: K, val: T[K]) =>
 	Object.assign({}, obj, {[prop]: val})
 
