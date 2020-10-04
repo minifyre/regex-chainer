@@ -99,8 +99,24 @@ export default () => {
 							x
 						</button>
 					)
+					const moveUp = (
+						<button
+							disabled={last || !i}
+							onClick={() => setSteps(moveTo(steps, i, i - 1))}
+						>
+							/\
+						</button>
+					)
+					const moveDown = (
+						<button
+							disabled={last || i + 2 === length}
+							onClick={() => setSteps(moveTo(steps, i, i + 1))}
+						>
+							\/
+						</button>
+					)
 
-					return <div>{inputs.concat([remove])}</div>
+					return <div>{inputs.concat([moveUp, moveDown, remove])}</div>
 				})}
 			</form>
 			<textarea
