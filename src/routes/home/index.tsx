@@ -137,6 +137,19 @@ export default () => {
 			>
 				{displayedText}
 			</textarea>
+			<footer>
+				Regular Expressions (RegEx) are great tools for find/replace &amp; match operations.
+				This tool allows you to easily chain transformations together &amp; bookmark them
+				for later. To get started, or learn more about regular expressions, visit{' '}
+				<a
+					href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions"
+					target="_blank"
+				>
+					<abbr title="Mozilla Developer Network">MDN</abbr>'s article on Regular
+					Expressions
+				</a>
+				.
+			</footer>
 		</div>
 	)
 }
