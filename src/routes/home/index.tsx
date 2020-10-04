@@ -4,6 +4,7 @@ import {useState} from 'preact/hooks'
 import {moveTo, removeAt, setAt} from '../../lib/array'
 
 import * as style from './style.css'
+import {SafetyIndicator} from './safety-indicator'
 import {userInput2regex} from './user-input2regex'
 
 type FN<A extends any[] = [], R = void> = (...args: A) => R
@@ -35,6 +36,8 @@ const sampleText = `<!Doctype html>
 const transformMatches = (text: string, pattern: RegExp, replacement: string) =>
 	(text.match(pattern) || []).map(match => match.replace(pattern, replacement)).join('')
 
+const blankSpace = <button disabled>&nbsp;</button>
+
 export default () => {
 	const [text, setText] = useState(sampleText)
 	const [steps, setSteps] = useState<IState['steps']>(sampleSteps)
@@ -63,6 +66,8 @@ export default () => {
 				<style>{`input:invalid{border: red solid 2px;}`}</style>
 				{viewSteps.map((step, i, {length}) => {
 					const last = i + 1 === length
+
+					const safetyIndicator = SafetyIndicator(step.pattern, step.regex)
 
 					const pattern = (
 						<input
@@ -94,6 +99,15 @@ export default () => {
 					)
 					const inputs = [pattern, type, replacement]
 
+					const attrs = step.regex
+						? {
+								href: `https://regexper.com/#${encodeURIComponent(step.pattern)}`,
+								target: '_blank',
+						  }
+						: {disabled: true}
+
+					const explain = <a {...attrs}>?</a>
+
 					const remove = (
 						<button disabled={last} onClick={() => setSteps(removeAt(steps, i))}>
 							x
@@ -115,8 +129,9 @@ export default () => {
 							\/
 						</button>
 					)
+					const buttons = [explain, moveUp, moveDown, blankSpace, remove]
 
-					return <div>{inputs.concat([moveUp, moveDown, remove])}</div>
+					return <div>{[safetyIndicator, ...inputs, ...buttons]}</div>
 				})}
 			</form>
 			<textarea
@@ -125,6 +140,19 @@ export default () => {
 			>
 				{displayedText}
 			</textarea>
+			<footer>
+				Regular Expressions (RegEx) are great tools for find/replace &amp; match operations.
+				This tool allows you to easily chain transformations together &amp; bookmark them
+				for later. To get started, or learn more about regular expressions, visit{' '}
+				<a
+					href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions"
+					target="_blank"
+				>
+					<abbr title="Mozilla Developer Network">MDN</abbr>'s article on Regular
+					Expressions
+				</a>
+				.
+			</footer>
 		</div>
 	)
 }

@@ -27,12 +27,14 @@
     "preact-jsx-chai": "^3.0.0",
     "preact-markup": "^2.0.0",
     "preact-render-to-string": "^5.1.4",
-    "preact-router": "^3.2.1"
+    "preact-router": "^3.2.1",
+    "safe-regex": "^2.1.1"
   },
   "devDependencies": {
     "@teamsupercell/typings-for-css-modules-loader": "^2.2.0",
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^26.0.8",
+    "@types/safe-regex": "^1.1.2",
     "@types/webpack-env": "^1.15.1",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
