@@ -15,6 +15,7 @@ type IState = {
 	text: string
 }
 
+const removeAt = <T,>(arr: T[], i: number) => arr.slice(0, i).concat(arr.slice(i + 1))
 // todo: T could be an object- i keyof T & arr T[] | extends {[K]: T}
 const setAt = <T,>(arr: T[], i: number, val: T) => [...arr.slice(0, i), val, ...arr.slice(i + 1)]
 const setPropVal = <T, K extends keyof T>(obj: T, prop: K, val: T[K]) =>
@@ -28,7 +29,8 @@ const sampleText = `<!Doctype html>
 <h1>Heading</h1>
 <p>Paragraph</p>
 `
-
+// todo: why are new steps being defaulted to match?
+// todo: replacing text with newlines is not working...
 const transformMatches = (text: string, pattern: RegExp, replacement: string) =>
 	(text.match(pattern) || []).map(match => match.replace(pattern, replacement)).join('')
 
@@ -58,16 +60,20 @@ export default () => {
 			<h1>Home</h1>
 			<form>
 				<style>{`input:invalid{border: red solid 2px;}`}</style>
-				{viewSteps.map((step, i) => (
-					<div>
+				{viewSteps.map((step, i, {length}) => {
+					const last = i + 1 === length
+
+					const pattern = (
 						<input
-							onChange={evt => setStep(i, 'pattern', evt.currentTarget.value)}
+							onInput={evt => setStep(i, 'pattern', evt.currentTarget.value)}
 							pattern={step.regex !== null ? '^.+$' : '$.+^'}
 							placeholder="//g"
 							value={step.pattern}
 						/>
+					)
+					const type = (
 						<select
-							onChange={evt =>
+							onInput={evt =>
 								setStep(i, 'type', evt.currentTarget.value as IStep['type'])
 							}
 						>
@@ -77,13 +83,24 @@ export default () => {
 								/>
 							))}
 						</select>
+					)
+					const replacement = (
 						<input
-							onChange={evt => setStep(i, 'replace', evt.currentTarget.value)}
+							onInput={evt => setStep(i, 'replace', evt.currentTarget.value)}
 							placeholder="$&"
 							value={step.replace}
 						/>
-					</div>
-				))}
+					)
+					const inputs = [pattern, type, replacement]
+
+					const remove = (
+						<button disabled={last} onClick={() => setSteps(removeAt(steps, i))}>
+							x
+						</button>
+					)
+
+					return <div>{inputs.concat([remove])}</div>
+				})}
 			</form>
 			<textarea
 				onChange={evt => setText(evt.currentTarget.value)}
