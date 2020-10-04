@@ -35,6 +35,8 @@ const sampleText = `<!Doctype html>
 const transformMatches = (text: string, pattern: RegExp, replacement: string) =>
 	(text.match(pattern) || []).map(match => match.replace(pattern, replacement)).join('')
 
+const blankSpace = <button disabled>&nbsp;</button>
+
 export default () => {
 	const [text, setText] = useState(sampleText)
 	const [steps, setSteps] = useState<IState['steps']>(sampleSteps)
@@ -94,6 +96,15 @@ export default () => {
 					)
 					const inputs = [pattern, type, replacement]
 
+					const attrs = step.regex
+						? {
+								href: `https://regexper.com/#${encodeURIComponent(step.pattern)}`,
+								target: '_blank',
+						  }
+						: {disabled: true}
+
+					const explain = <a {...attrs}>?</a>
+
 					const remove = (
 						<button disabled={last} onClick={() => setSteps(removeAt(steps, i))}>
 							x
@@ -115,8 +126,9 @@ export default () => {
 							\/
 						</button>
 					)
+					const buttons = [explain, moveUp, moveDown, remove]
 
-					return <div>{inputs.concat([moveUp, moveDown, remove])}</div>
+					return <div>{inputs.concat(buttons)}</div>
 				})}
 			</form>
 			<textarea
