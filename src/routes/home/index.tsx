@@ -4,6 +4,7 @@ import {useState} from 'preact/hooks'
 import {moveTo, removeAt, setAt} from '../../lib/array'
 
 import * as style from './style.css'
+import {SafetyIndicator} from './safety-indicator'
 import {userInput2regex} from './user-input2regex'
 
 type FN<A extends any[] = [], R = void> = (...args: A) => R
@@ -65,6 +66,8 @@ export default () => {
 				<style>{`input:invalid{border: red solid 2px;}`}</style>
 				{viewSteps.map((step, i, {length}) => {
 					const last = i + 1 === length
+
+					const safetyIndicator = SafetyIndicator(step.pattern, step.regex)
 
 					const pattern = (
 						<input
@@ -128,7 +131,7 @@ export default () => {
 					)
 					const buttons = [explain, moveUp, moveDown, blankSpace, remove]
 
-					return <div>{inputs.concat(buttons)}</div>
+					return <div>{[safetyIndicator, ...inputs, ...buttons]}</div>
 				})}
 			</form>
 			<textarea
