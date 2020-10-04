@@ -126,7 +126,7 @@ export default () => {
 							\/
 						</button>
 					)
-					const buttons = [explain, moveUp, moveDown, remove]
+					const buttons = [explain, moveUp, moveDown, blankSpace, remove]
 
 					return <div>{inputs.concat(buttons)}</div>
 				})}
